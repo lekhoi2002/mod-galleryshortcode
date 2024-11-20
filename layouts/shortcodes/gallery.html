@@ -1,0 +1,46 @@
+<!-- layouts/shortcodes/gallery.html -->
+{{ $galleryConfig := site.Params.gallery }}
+{{ $columns := .Get 1 | default $galleryConfig.columns_default }}
+{{ $thumbQuality := $galleryConfig.thumb_quality | default 75 }}
+{{ $originalQuality := $galleryConfig.original_quality | default 85 }}
+
+<div class="gallery-container">
+    {{ $path := .Get 0 }}
+    {{ $images := slice }}
+    {{ $albumMetadata := "" }}
+    {{ if (fileExists (print "assets/img/" $path)) }}
+        {{ $images = readDir (print "assets/img/" $path) }}
+        {{ if (fileExists (print "assets/img/" $path "/album.txt")) }}
+            {{ $albumMetadata = readFile (print "assets/img/" $path "/album.txt") }}
+        {{ end }}
+    {{ end }}
+
+    {{ if gt (len $images) 0 }}
+        <div class="row row-cols-{{ $columns }} g-3">
+            {{ $validExtensions := slice ".jpg" ".jpeg" ".png" ".webp" }}
+            {{ range $index, $image := $images }}
+                {{ $ext := lower (path.Ext $image.Name) }}
+                {{ if in $validExtensions $ext }}
+                    {{ $imagePath := printf "img/%s/%s" $path $image.Name }}
+                    {{ $imageResource := resources.Get $imagePath }}
+                    {{ $thumbnailPath := $imageResource.Resize (printf "400x267 webp q%d" $thumbQuality) }}
+                    {{ $originalImage := $imageResource.Resize (printf "800x webp q%d" $originalQuality) }}
+                    {{ partial "gallery-item.html" (dict "thumbnail" $thumbnailPath.RelPermalink "original" $originalImage.RelPermalink) }}
+                {{ end }}
+            {{ end }}
+        </div>
+
+        {{ if site.Params.performance.bundle_js }}
+            {{ $galleryJS := resources.Get "js/modules/galleryshortcode/gallery-lazyload.js" | resources.ToESModule }}
+            {{ if hugo.IsProduction }}
+                {{ $opts := dict "minify" site.Params.performance.minify_js "target" "es2018" }}
+                {{ $galleryJS = $galleryJS | js.Build $opts | fingerprint "sha512" }}
+            {{ end }}
+            <script type="module" src="{{ $galleryJS.RelPermalink }}" {{ if site.Params.performance.defer_js }}defer{{ end }}></script>
+        {{ else }}
+            <script src="{{ "js/modules/galleryshortcode/gallery-lazyload.js" | relURL }}" {{ if site.Params.performance.defer_js }}defer{{ end }}></script>
+        {{ end }}
+    {{ else }}
+        <p>Album không tồn tại hoặc không chứa hình ảnh hợp lệ.</p>
+    {{ end }}
+</div>

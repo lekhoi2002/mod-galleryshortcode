@@ -1,0 +1,4 @@
+# config.toml
+[module]
+  path = "github.com/lekhoi2002/mod-galleryshortcode"
+  version = "0.1.0"

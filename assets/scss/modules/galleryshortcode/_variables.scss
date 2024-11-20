@@ -1,0 +1,12 @@
+//// assets/scss/modules/galleryshortcode/_variables.scss
+:root {
+    --gallery-transition-duration: 0.3s;
+    --gallery-hover-scale: 1.03;
+    --gallery-thumb-ratio: calc(267 / 400);
+    --modal-overlay-bg: rgba(0, 0, 0, 0.8);
+    --close-btn-size: 2rem;
+    --shimmer-color-start: rgba(200, 200, 200, 0);
+    --shimmer-color-middle: rgba(200, 200, 200, 0.8);
+    --shimmer-color-end: rgba(200, 200, 200, 0);
+    --shimmer-animation-duration: 1.5s;
+}
