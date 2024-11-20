@@ -1,20 +1,33 @@
 // assets/scss/modules/galleryshortcode/galleryshortcode.scss
+
 .gallery-container {
     @extend .container;
 
     .row {
-        @extend .row-cols-1;
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -0.75rem; // Điều chỉnh khoảng cách theo Bootstrap nếu cần
+        margin-left: -0.75rem;
+        --bs-gutter-x: 1.5rem; // Sử dụng biến gutter của Bootstrap nếu cần
+        --bs-columns: 1; // Số cột mặc định trên màn hình nhỏ
 
         @include media-breakpoint-up(sm) {
-            @extend .row-cols-2;
+            --bs-columns: 2;
         }
 
         @include media-breakpoint-up(md) {
-            @extend .row-cols-3;
+            --bs-columns: 3;
         }
 
         @include media-breakpoint-up(lg) {
-            @extend .row-cols-4;
+            --bs-columns: 4;
+        }
+
+        > * {
+            flex: 0 0 calc(100% / var(--bs-columns));
+            max-width: calc(100% / var(--bs-columns));
+            padding-right: calc(var(--bs-gutter-x) * 0.5);
+            padding-left: calc(var(--bs-gutter-x) * 0.5);
         }
     }
 }
@@ -95,7 +108,7 @@
     }
 
     &::before {
-        content: '&times;';
+        content: '\00d7'; // Ký tự '×'
         font-size: 1.5rem;
     }
 }
