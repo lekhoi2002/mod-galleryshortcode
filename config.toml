@@ -1,4 +1,14 @@
 # config.toml
+[[module.mounts]]
+  source = "assets"
+  target = "assets"
+
+[[module.mounts]]
+  source = "layouts"
+  target = "layouts"
+[[module.mounts]]
+  source = "assets/scss/modules"
+  target = "assets/scss/modules"
 [module]
   path = "github.com/lekhoi2002/mod-galleryshortcode"
   version = "0.1.0"
